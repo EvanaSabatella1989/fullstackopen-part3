@@ -1,6 +1,9 @@
 // const http = require('http')
 const express = require('express')
-const app = express()
+const app = express();
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
 
 // 3.1: Backend de la Agenda Telefónica paso 1
 // Implementa una aplicación Node que devuelva una lista codificada de entradas de la agenda telefónica desde la dirección http://localhost:3001/api/persons.
@@ -95,6 +98,29 @@ app.delete('/api/persons/:id', (req, res) => {
 
   // Responder con un mensaje de éxito
   res.json({ message: 'Persona eliminada correctamente' });
+});
+
+
+// 3.5: Backend de la Agenda Telefónica, paso 5
+// Expande el backend para que se puedan agregar nuevas entradas a la agenda telefónica realizando solicitudes HTTP POST a la dirección http://localhost:3001/api/persons.
+
+// Genera un nuevo id para la entrada de la agenda con la función Math.random. Utiliza un rango lo suficientemente grande para tus valores aleatorios de modo que la probabilidad de crear IDs duplicados sea pequeña.
+
+app.post('/api/persons', (req, res) => {
+  const { name, number } = req.body;
+
+  // Generar un nuevo ID único
+  let id;
+  do {
+      id = Math.floor(Math.random() * 1000000); // Rango lo suficientemente grande para evitar colisiones
+  } while (persons.some(person => person.id === id));
+
+  // Agregar la nueva persona a la agenda
+  const newPerson = { id, name, number };
+  persons.push(newPerson);
+
+  // Responder con los datos de la nueva persona
+  res.json(newPerson);
 });
 
 
