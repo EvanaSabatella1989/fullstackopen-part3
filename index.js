@@ -73,6 +73,34 @@ app.get('/api/persons/:id', (req, res) => {
   res.json(person);
 });
 
+
+// 3.4: Backend de la Agenda Telefónica, paso 4
+// Implementa la funcionalidad que hace posible eliminar una sola entrada de la agenda telefónica mediante una solicitud HTTP DELETE a la URL única de esa entrada de la agenda.
+
+// Prueba que tu funcionalidad funcione con Postman o el cliente REST de Visual Studio Code.
+
+app.delete('/api/persons/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+
+  // Buscar la persona en la agenda
+  const index = persons.findIndex(p => p.id === id);
+
+  if (index === -1) {
+      // Si no se encuentra la persona, responder con código 404
+      return res.status(404).json({ error: 'Persona no encontrada' });
+  }
+
+  // Eliminar la persona del arreglo de la agenda
+  persons.splice(index, 1);
+
+  // Responder con un mensaje de éxito
+  res.json({ message: 'Persona eliminada correctamente' });
+});
+
+
+
+
+
 const PORT = 3001
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
