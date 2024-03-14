@@ -43,6 +43,15 @@ app.get('/api/persons', (request, response) => {
 // 3.2: Backend de la Agenda Telefónica, paso 2
 // Implementa una página en la dirección http://localhost:3001/info que se parezca más o menos a esto:
 
+app.get('/info', (req, res) => {
+  const currentTime = new Date().toString();
+  const numberOfEntries = persons.length;
+  
+  const info = `Phonebook has info for ${numberOfEntries} people <br/> ${currentTime}`;
+  
+  res.send(info);
+});
+
 const PORT = 3001
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
