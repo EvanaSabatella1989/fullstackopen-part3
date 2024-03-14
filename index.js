@@ -106,8 +106,24 @@ app.delete('/api/persons/:id', (req, res) => {
 
 // Genera un nuevo id para la entrada de la agenda con la función Math.random. Utiliza un rango lo suficientemente grande para tus valores aleatorios de modo que la probabilidad de crear IDs duplicados sea pequeña.
 
+// Función para validar si el nombre ya existe en la agenda
+const isNameAlreadyExists = (name) => {
+  return persons.some(person => person.name === name);
+};
+
+// Ruta para agregar una nueva entrada a la agenda
 app.post('/api/persons', (req, res) => {
   const { name, number } = req.body;
+
+  // Validar si falta el nombre o el número
+  if (!name || !number) {
+      return res.status(400).json({ error: 'Falta el nombre o el número en la solicitud' });
+  }
+
+  // Validar si el nombre ya existe en la agenda
+  if (isNameAlreadyExists(name)) {
+      return res.status(400).json({ error: 'El nombre ya existe en la agenda' });
+  }
 
   // Generar un nuevo ID único
   let id;
@@ -123,7 +139,12 @@ app.post('/api/persons', (req, res) => {
   res.json(newPerson);
 });
 
+// 3.6: Backend de la Agenda Telefónica, paso 6
+// Implementa el manejo de errores para crear nuevas entradas. No se permite que la solicitud se realice correctamente si:
 
+// Falta el nombre o el número
+// El nombre ya existe en la agenda
+// Responde a solicitudes como estas con el código de estado apropiado y también envía información que explique el motivo del error
 
 
 
