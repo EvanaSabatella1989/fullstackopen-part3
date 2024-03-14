@@ -52,6 +52,27 @@ app.get('/info', (req, res) => {
   res.send(info);
 });
 
+// 3.3: Backend de la Agenda Telefónica, paso 3
+// Implementa la funcionalidad para mostrar la información de una sola entrada de la agenda. La URL para obtener los datos de una persona con la identificación 5 debe ser 
+// http://localhost:3001/api/persons/5
+
+// Si no se encuentra una entrada para la identificación dada, el servidor debe responder con el código de estado apropiado.
+
+app.get('/api/persons/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+
+  // Buscar la persona en la agenda
+  const person = persons.find(p => p.id === id);
+
+  if (!person) {
+      // Si no se encuentra la persona, responder con código 404
+      return res.status(404).json({ error: 'Persona no encontrada' });
+  }
+
+  // Si se encuentra la persona, responder con sus datos
+  res.json(person);
+});
+
 const PORT = 3001
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
