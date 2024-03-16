@@ -2,8 +2,34 @@
 const express = require('express')
 const app = express();
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 
 app.use(bodyParser.json());
+
+// Configura Morgan para registrar mensajes en la consola según la configuración 'tiny'
+//app.use(morgan('tiny'));
+
+// Configura Morgan para mostrar los datos de las solicitudes POST junto con el registro
+app.use(morgan((tokens, req, res) => {
+  if (req.method === 'POST') {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, 'content-length'), '-',
+      tokens['response-time'](req, res), 'ms',
+      JSON.stringify(req.body)
+    ].join(' ');
+  } else {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, 'content-length'), '-',
+      tokens['response-time'](req, res), 'ms'
+    ].join(' ');
+  }
+}));
 
 // 3.1: Backend de la Agenda Telefónica paso 1
 // Implementa una aplicación Node que devuelva una lista codificada de entradas de la agenda telefónica desde la dirección http://localhost:3001/api/persons.
@@ -147,6 +173,14 @@ app.post('/api/persons', (req, res) => {
 // Responde a solicitudes como estas con el código de estado apropiado y también envía información que explique el motivo del error
 
 
+
+// 3.7: Backend de la Agenda Telefónica, paso 7
+// Agrega el middleware morgan a tu aplicación para el registro de mensajes. Configúralo para registrar mensajes en tu consola según la configuración tiny.
+// Morgan se instala como todas las demás librerías con el comando npm install. La puesta en funcionamiento de Morgan ocurre de la misma manera que la configuración de cualquier otro middleware mediante el comando app.use.
+
+
+// 3.8*: Backend de la Agenda Telefónica, paso 8
+// Configura morgan para que también muestre los datos enviados en las solicitudes HTTP POST
 
 const PORT = 3001
 app.listen(PORT)
